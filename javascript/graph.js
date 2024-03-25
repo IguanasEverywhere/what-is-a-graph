@@ -1,15 +1,39 @@
 class Graph {
   constructor(paths) {
+    this.graph = {};
 
+    for (let i = 0; i < paths.length; i++) {
+      for (let j = 0; j < paths[i].length; j++) {
+        let key = paths[i][j];
+        if (!this.graph[key]) {
+          this.graph[key] = new Set();
+        }
+        if (paths[i][j + 1]) {
+          this.graph[key].add(paths[i][j + 1]);
+        }
+        if (paths[i][j - 1]) {
+          this.graph[key].add(paths[i][j - 1]);
+        }
+      }
+    }
   }
 
   isAdjacent(vertexA, vertexB) {
+    return this.graph[vertexA].has(vertexB);
 
   }
 
   // array is an adjacency list
   addVertex(vertex, array) {
-
+    this.graph[vertex] = new Set();
+    for (let v of array) {
+      if (this.graph[v]) {
+        this.graph[v].add(vertex);
+      } else {
+        this.graph[v] = new Set(vertex);
+      }
+      this.graph[vertex].add(v);
+    }
   }
 }
 
